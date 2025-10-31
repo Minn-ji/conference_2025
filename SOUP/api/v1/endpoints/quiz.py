@@ -6,8 +6,8 @@ from graphs import create_eval_quiz_graph
 from schema import GetQuizRequest, EvaluateQuizRequest
 
 router = APIRouter()
-
-@router.post("/get-quiz")
+# http://127.0.0.1:8000/quiz/generate
+@router.post("/generate")
 async def get_quiz(request: GetQuizRequest):
     '''create new quiz for daily planner'''
     today_planner = request.today_planner
@@ -20,8 +20,8 @@ async def get_quiz(request: GetQuizRequest):
     return {"status": "OK"}
 
 
-
-@router.post("/evaluate-quiz", status_code=202)
+# http://127.0.0.1:8000/quiz/evaluate
+@router.post("/evaluate", status_code=202)
 async def evaluator(request: EvaluateQuizRequest):
     ''' evaluate quiz with llm'''
     quizs = request.quizzes

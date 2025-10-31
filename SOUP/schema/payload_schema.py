@@ -38,16 +38,8 @@ from typing import List, Optional, Literal, Union
 #     content: List[PlannerContent] = Field(..., description="하루 공부 계획 목록")
 #     content_total_min: int = Field(..., description="총 계획된 공부 시간 (분 단위)")
 
-# # GetPlannerRequest
-# class GetPlannerRequest(BaseModel):
-#     grade: str | int = Field(..., description="학년")
-#     recent_score: float = Field(..., description="최근 학기 성적")
-#     initial_level: int = Field(..., description="학습 초기 수준")
-#     recent_quiz_info: List[QuizInfo] = Field(..., description="최근 퀴즈 정보 목록")
-#     recent_planner: Planner = Field(..., description="가장 최근 학습 플래너 정보")
 
-
-class GetPlannerRequest(BaseModel):
+class GeneratePlannerRequest(BaseModel):
     student_id: str = Field(..., description="학생 ID")
     date: str = Field(..., description="플래너 기준 날짜 (YYYY-MM-DD)")
 

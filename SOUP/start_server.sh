@@ -1,5 +1,4 @@
 
-# cd SOUP 
-# uv run uvicorn main:app --port 8000 --reload
+uv run uvicorn main:app --host 0.0.0.0 --reload --port 8000
 
 

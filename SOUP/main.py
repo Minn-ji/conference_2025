@@ -1,7 +1,5 @@
 from fastapi import FastAPI
-from RAG_Evaluation.api.v1.endpoints.evaluate_quiz import evaluator
-from SOUP.api.v1.routers import api_router
-from graphs.main_graph import create_main_graph, EvaluationState
+from api.v1.routers import api_router
 
 app = FastAPI(
     title="SOUP API",
