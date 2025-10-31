@@ -1,0 +1,53 @@
+// create planner request
+// 학년, 최근 학기 성적, 학습수준, 성취현황, 최근 성취 퀴즈 정보 => 학습수준 분석
+// 계획 달성률, 계획 대비 실제 학습시간, => 이전 플래너 분석(학습 기록)
+// 문항별 풀이 시간 및 정답률, 문제 유형별 정답률, 개념별 정답률, 난이도별 정답률, 틀린 문제 리스트 => 이전 퀴즈 분석
+
+{
+    "grade": str | int,
+    "recent_score": float, 
+    "initial_level": int,
+    "recent_quiz_info": [
+          {
+              "quiz_id": str,
+              "quizes": [
+                  {   "question_num": int,
+                      "question_type": Literal["이해", "계산", "문제해결", "추론"],
+                      "essay_type_score": {"score": float, "text": str},
+                      "difficulty_level": int,
+                      "is_correct": bool,
+                      "timeout": bool,
+                  },
+                  ...
+              ],
+              "total_score": int
+          },
+          ...],
+    "recent_planner": {
+      "meta": {
+        "date": "YYYY-MM-DD",          // 예: "{TARGET_DATE}"
+        "day_of_week": "월|화|수|목|금|토|일",
+        "planned_time_min": 0
+      },
+      "content": [
+        {"text": "문자열 한 줄", "time": 0},
+        {"text": "문자열 한 줄", "time": 0}
+      ],
+      "content_total_min": 0
+    }
+}
+
+// create planner response
+{
+  "meta": {
+    "date": "YYYY-MM-DD",          // 예: "{TARGET_DATE}"
+    "day_of_week": "월|화|수|목|금|토|일",
+    "planned_time_min": 0
+  },
+  "content": [
+    {"text": "문자열 한 줄", "time": 0},
+    {"text": "문자열 한 줄", "time": 0}
+  ],
+  "content_total_min": 0
+}
+

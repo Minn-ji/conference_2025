@@ -1,0 +1,47 @@
+// evaluate quiz request
+{
+    "quiz_id": str,
+    "quizes": [
+        {   "question_num": int,
+            "question": str,
+            "question_type": Literal["이해", "계산", "문제해결", "추론"],
+            "essay_type_score": float | null,
+            "difficulty_level": int,
+            "answer": int | str,
+            "user_answer": str,
+            "time": int,
+            "evaluate_essay_type" : bool
+        },
+        ...
+    ],
+}
+
+// evaluate quiz response
+{
+    "quiz_id": str,
+    "quizes": [
+        {   "question_num": int,
+            "question_type": Literal["이해", "계산", "문제해결", "추론"],
+            "essay_type_score": {"score": float, "text": str},
+            "difficulty_level": int,
+            "is_correct": bool,
+            "timeout": bool,
+        },
+        ...
+    ],
+    "total_score": int
+}
+
+
+// essay request
+{ 
+    "question": str,
+    "answer": int | str,
+    "user_answer": str,
+},
+
+// essay response
+{
+    "essay_score": int,
+    "score_text": str
+}
