@@ -1,14 +1,13 @@
 import json
 from fastapi import APIRouter, HTTPException
 
-from core import create_eval_quiz_input_payload
 from graphs import create_eval_quiz_graph
-from schema import GetQuizRequest, EvaluateQuizRequest
+from schema import GenerateQuizRequest, EvaluateQuizRequest, create_eval_quiz_input_payload
 
 router = APIRouter()
 # http://127.0.0.1:8000/quiz/generate
 @router.post("/generate")
-async def get_quiz(request: GetQuizRequest):
+async def get_quiz(request: GenerateQuizRequest):
     '''create new quiz for daily planner'''
     today_planner = request.today_planner
     achieve_rate = 0

@@ -2,7 +2,6 @@
 .git/
 .gitignore
 
-# Docker files
 # Dockerfile
 .dockerignore
 
@@ -16,28 +15,16 @@ pycache/
 # IDE and editor directories
 .idea/
 .vscode/
-
+.venv/
 config.local.yaml
 
-# Test and benchmark files (not needed in production)
-test/
-Benchmarks/
 
-curl_test.sh
-
-# Local results and data outputs that aren't needed at runtime
-results/
-data/outputs/
-data/results/
-
-
+# other files
 test/
 data/
-Benchmarks/
 results/
 *.ipynb
 *.log
-curl_test.sh
-
+*.sh
 .DS_Store
 

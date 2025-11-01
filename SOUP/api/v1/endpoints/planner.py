@@ -2,7 +2,7 @@ from typing import List
 from fastapi import APIRouter
 # import asyncio
 from schema import GeneratePlannerRequest, create_planner_input_payload
-from graphs import create_planner_graph
+from graphs import generate_planner_graph
 
 router = APIRouter()
 
@@ -10,11 +10,12 @@ router = APIRouter()
 @router.post("/generate", status_code=200)
 async def evaluator(request: GeneratePlannerRequest):
     ''' generate new planner'''
+    print("generate new planner")
     graph_input = create_planner_input_payload(student_id=request.student_id, date=request.date)
-    main_graph = create_planner_graph()
+    graph = generate_planner_graph()
     print(graph_input)
-    # response = await main_graph.ainvoke(input=graph_input)
-    # planner = response.get("planner")
+    response = await graph.ainvoke(input=graph_input)
+    planner = response.get("planner")
     
-    # return {"planner": planner}
+    return {"planner": planner}
 

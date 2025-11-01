@@ -1,8 +1,7 @@
 FROM python:3.12.9-slim-bookworm
-# COPY --from=ghcr.io/astral-sh/uv:python3.12-bookworm-slim /uv /uvx /bin/
+
+# UV를 컨테이너 내에 설치
 COPY --from=ghcr.io/astral-sh/uv:0.8.17 /uv /uvx /bin/
-# COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
-# Ensure the installed binary is on the `PATH`
 
 RUN apt-get update -q \
     && apt-get install --no-install-recommends -qy python3-dev g++ gcc

@@ -16,7 +16,8 @@ def create_planner_input_payload(student_id: str, date: str):
     }
 
 
-# def create_eval_quiz_input_payload(request):
+def create_eval_quiz_input_payload(request):
+    pass
 #     all_quizzes = request.quizzes
 #     for quiz in all_quizzes:
 #         question = quiz["question"]
