@@ -21,6 +21,7 @@ class RecentQuizInfo(TypedDict):
 class PlannerItem(TypedDict):
     text: str
     time: float
+    chechked: bool
 
 
 # 최근 플래너 메타 정보
@@ -40,15 +41,11 @@ class RecentPlanner(TypedDict):
 # 최종 PlannerState
 class PlannerState(TypedDict):
     grade: Optional[int | str]   # 1,2,3 or "1","2","3"
-    study_hours: Optional[float]
+    available_time_min: Optional[int]     # 하루 공부 가능 시간(분)
     initial_level: Optional[Literal["A","B","C","D","E","F"]] # SOUP level
     recent_quiz_info: Optional[RecentQuizInfo]
     recent_planner: Optional[RecentPlanner]
-    
-    # 분석/생성에 필요한 추가 입력
     recent_score: Optional[str]           # 최근 학기 성적(등급/점수 등 문자열)
-    recent_grade: Optional[str]           # 최근 학기 성적
-    available_time_min: Optional[int]     # 하루 공부 가능 시간(분)
     current_unit: Optional[str]           # 현재 학습 중인 단원
     related_units: Optional[List[str]]    # 주변 단원들
 
@@ -57,3 +54,8 @@ class PlannerState(TypedDict):
     recent_quiz_analyze_result: Optional[str]
     recent_planner_analyze_result: Optional[str]
     generated_planner: Optional[Dict[str, Any]]  # 생성된 플래너(JSON dict)
+
+    # 그래프 routing용 필드
+    has_quiz: bool 
+    has_planner: bool
+    branch_flag: Optional[Literal["recent_quiz", "recent_planner", "all", "generate_planner"]]

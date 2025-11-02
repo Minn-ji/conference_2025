@@ -11,7 +11,6 @@ DB_USER = os.getenv("DB_USER") # root
 DB_NAME = os.getenv("DB_NAME")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
 DB_PORT = os.getenv("DB_PORT")
-
 DB_URL = f"postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 engine = create_engine(DB_URL, pool_pre_ping=True)
 
@@ -75,7 +74,7 @@ def get_recent_quiz_info(student_id: int) -> Dict[str, Any]:
         "total_score": sum(1 for q in quiz_items if q["is_correct"]) * 10
     }
 
-def get_korean_day(weekday_idx: int) -> str:
+def _get_korean_day(weekday_idx: int) -> str:
     days = ["월", "화", "수", "목", "금", "토", "일"]
     return days[weekday_idx % 7]
 
@@ -104,7 +103,7 @@ def get_recent_planner(student_id: int) -> Union[List, Dict[str, Any]]:
     return {
         "meta": {
             "date": str(first["date"].date()),
-            "day_of_week": get_korean_day(first["date"].weekday()),
+            "day_of_week": _get_korean_day(first["date"].weekday()),
             "planned_time_min": sum(c["time"] for c in contents)
         },
         "content": contents,

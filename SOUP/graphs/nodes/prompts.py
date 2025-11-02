@@ -156,7 +156,7 @@ generate_planner_prompt='''
 
 [입력]
 - 학년: {grade}  
-- 최근 학기 성적: {recent_grade}  
+- 최근 학기 성적: {recent_score}  
 - 하루 공부 가능 시간(분): {available_time_min}  
 - 학습 수준: {learning_level}
 - 현재 학습 중인 단원: {current_unit}  
@@ -188,19 +188,19 @@ generate_planner_prompt='''
 ---
 
 [출력 JSON 형식]
-{
-  "meta": {
+{{
+  "meta": {{
     "date": "YYYY-MM-DD",
     "day_of_week": "월|화|수|목|금|토|일",
     "planned_time_min": 0
-  },
+  }},
   "content": [
-    {"text": "문자열 한 줄", "time": 0},
-    {"text": "문자열 한 줄", "time": 0},
-    {"text": "문자열 한 줄", "time": 0}
+    {{"text": "문자열 한 줄", "time": 0}},
+    {{"text": "문자열 한 줄", "time": 0}},
+    {{"text": "문자열 한 줄", "time": 0}}
   ],
   "content_total_min": 0
-}
+}}
 
 ---
 
@@ -218,6 +218,7 @@ generate_planner_prompt='''
   ],
   "content_total_min": 90
 }}
+
 
 '''
 generate_quiz_prompt='''

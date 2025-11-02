@@ -15,7 +15,7 @@ async def evaluator(request: GeneratePlannerRequest):
     graph = generate_planner_graph()
     print(graph_input)
     response = await graph.ainvoke(input=graph_input)
-    planner = response.get("planner")
+    planner = response.get("generated_planner")
     
     return {"planner": planner}
 

@@ -1,7 +1,7 @@
 import json
 from fastapi import APIRouter, HTTPException
 
-from graphs import create_eval_quiz_graph
+from graphs import eval_quiz_graph
 from schema import GenerateQuizRequest, EvaluateQuizRequest, create_eval_quiz_input_payload
 
 router = APIRouter()
@@ -25,7 +25,7 @@ async def evaluator(request: EvaluateQuizRequest):
     ''' evaluate quiz with llm'''
     quizs = request.quizzes
     graph_input = create_eval_quiz_input_payload(quizs)
-    main_graph = create_eval_quiz_graph()
+    main_graph = eval_quiz_graph()
     response = await main_graph.ainvoke(input=graph_input)
     evaluate_result = response.get("result")
 

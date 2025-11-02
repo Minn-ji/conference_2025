@@ -1,4 +1,4 @@
-from graphs.state import PlannerState
+from graphs.states import PlannerState
 from utils import safe, ask_llm, get_avg_quiz_score, extract_accuracy_by_topic, extract_accuracy_by_difficulty
 from .prompts import student_check_prompt
 
@@ -15,4 +15,5 @@ def node_student_check(state: PlannerState) -> PlannerState:
         accuracy_by_difficulty=safe(extract_accuracy_by_difficulty(state.get("recent_quiz_info")))
     )
     out = ask_llm(prompt)
+    print("student_check_result", out)
     return {**state, "student_check_result": out}
