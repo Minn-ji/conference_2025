@@ -3,6 +3,7 @@ from typing import Dict, List, Any, Union
 from fastapi import HTTPException
 from sqlalchemy import create_engine, text
 from dotenv import load_dotenv
+from collections import defaultdict
 
 load_dotenv()
 DB_HOST = os.getenv("DB_HOST")
@@ -28,6 +29,26 @@ def get_user_info(student_id: int) -> Dict[str, Any]:
         raise HTTPException(status_code=404, detail=f"User {student_id} not found.")
     return dict(res._mapping)
 
+    # previous_quiz_score: Optional[int]        # 이전 퀴즈 점수
+    # score_trend: Optional[str]                # "상승/하락/유지" 등
+    # accuracy_by_unit: Optional[Dict[str, float]]      # 단원별 정답률
+    # accuracy_by_topic: Optional[Dict[str, float]]     # 유형별 정답률
+    # accuracy_by_difficulty: Optional[Dict[str, float]]# 난이도별 정답률
+    # time_efficiency: Literal["상승",
+
+def _compute_accuracy_by(items, key):
+    counts = defaultdict(lambda: {"correct": 0, "total": 0})
+    for r in items:
+        k = r[key]
+        counts[k]["total"] += 1
+        if r["is_correct"]:
+            counts[k]["correct"] += 1
+
+    return {
+        k: v["correct"] / v["total"]
+        for k, v in counts.items()
+        if v["total"] > 0
+    }
 
 def get_recent_quiz_info(student_id: int) -> Dict[str, Any]:
     # 최근 quiz_id 조회
@@ -36,26 +57,36 @@ def get_recent_quiz_info(student_id: int) -> Dict[str, Any]:
         FROM question_sets
         WHERE user_id = :uid
         ORDER BY finished_at DESC
-        LIMIT 1
+        LIMIT 2
     """)
 
     with engine.connect() as conn:
-        result = conn.execute(quiz_id_query, {"uid": student_id}).fetchone()
+        quiz_rows = conn.execute(quiz_id_query, {"uid": student_id}).fetchall()
 
-        if not result:
+        if not quiz_rows:
             # 최근 퀴즈 본 거 없음
             return {}
 
-        quiz_id = result._mapping["question_set_id"]
+        quiz_id = quiz_rows[0]._mapping["question_set_id"]
+        prev_quiz_id = quiz_rows[1]._mapping["question_set_id"] if len(quiz_rows) > 1 else None
 
         item_query = text("""
-            SELECT is_correct, difficulty_level, essay_type_score, timeout, is_correnct
-            FROM question_set_items
-            WHERE question_set_id = :qid
-            ORDER BY question_set_item_id
+            SELECT 
+                qsi.is_correct,
+                qsi.timeout,
+                qsi.essay_type_score,
+                q.difficulty_level,
+                q.subject_unit_id,
+                q.question_type
+            FROM question_set_items qsi
+            JOIN questions q ON qsi.question_id = q.question_id
+            WHERE qsi.question_set_id = :qid
         """)
-
-        items = conn.execute(item_query, {"qid": quiz_id}).fetchall()
+        rows = conn.execute(item_query, {"qid": quiz_id}).fetchall()
+        if prev_quiz_id: #이전 퀴즈
+            prev_rows = conn.execute(item_query, {"qid": prev_quiz_id}).fetchall()
+        else:
+            prev_rows = []
 
     quiz_items = [
         {
@@ -65,14 +96,59 @@ def get_recent_quiz_info(student_id: int) -> Dict[str, Any]:
             "is_correct": bool(r._mapping["is_correct"]),
             "timeout": bool(r._mapping["timeout"]), 
         }
-        for idx, r in enumerate(items)
+        for idx, r in enumerate(rows)
     ]
+
+    total_score = sum(1 for q in quiz_items if q["is_correct"]) * 10
+    prev_score = (
+        sum(1 for r in prev_rows if r._mapping["is_correct"]) * 10
+        if prev_rows else None
+    )
+    if prev_score is None:
+        score_trend = None
+    elif total_score > prev_score:
+        score_trend = "상승"
+    elif total_score < prev_score:
+        score_trend = "하락"
+    else:
+        score_trend = "유지"
+
+    accuracy_by_unit = _compute_accuracy_by(
+        [{**r._mapping, "is_correct": bool(r._mapping["is_correct"])} for r in rows],
+        "subject_unit_id"
+    )
+    accuracy_by_topic = _compute_accuracy_by(
+        [{**r._mapping, "is_correct": bool(r._mapping["is_correct"])} for r in rows],
+        "topic"
+    )
+    accuracy_by_difficulty = _compute_accuracy_by(
+        [{**r._mapping, "is_correct": bool(r._mapping["is_correct"])} for r in rows],
+        "difficulty_level"
+    )
+    timeout_rate = sum(1 for q in quiz_items if q["timeout"]) / len(quiz_items)
+    if prev_rows:
+        prev_timeout_rate = sum(1 for r in prev_rows if r._mapping["timeout"]) / len(prev_rows)
+        if timeout_rate < prev_timeout_rate:
+            time_efficiency = "상승"
+        elif timeout_rate > prev_timeout_rate:
+            time_efficiency = "하락"
+        else:
+            time_efficiency = "유지"
+    else:
+        time_efficiency = None
 
     return {
         "quiz_id": str(quiz_id),
         "quizes": quiz_items,
-        "total_score": sum(1 for q in quiz_items if q["is_correct"]) * 10
+        "total_score": sum(1 for q in quiz_items if q["is_correct"]) * 10,
+        "previous_quiz_score": prev_score,
+        "score_trend": score_trend,  # 상승/하락/유지
+        "accuracy_by_unit": accuracy_by_unit,
+        "accuracy_by_topic": accuracy_by_topic,
+        "accuracy_by_difficulty": accuracy_by_difficulty,
+        "time_efficiency": time_efficiency, # 상승/하락/유지
     }
+
 
 def _get_korean_day(weekday_idx: int) -> str:
     days = ["월", "화", "수", "목", "금", "토", "일"]

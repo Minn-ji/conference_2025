@@ -1,6 +1,6 @@
 import json
 from fastapi import APIRouter, HTTPException
-
+from utils import get_recent_planner
 from graphs import eval_quiz_graph
 from schema import GenerateQuizRequest, EvaluateQuizRequest, create_eval_quiz_input_payload
 
@@ -9,7 +9,8 @@ router = APIRouter()
 @router.post("/generate")
 async def get_quiz(request: GenerateQuizRequest):
     '''create new quiz for daily planner'''
-    today_planner = request.today_planner
+    payload = request.today_planner
+
     achieve_rate = 0
     for row in today_planner:
         achieve_rate += row["achieve"]

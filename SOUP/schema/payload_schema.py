@@ -32,7 +32,6 @@ class EvaluateQuizQuestion(BaseModel):
 # EvaluateQuizRequest
 class EvaluateQuizRequest(BaseModel):
     quiz_id: str = Field(..., description="퀴즈 ID")
-    quizes: List[EvaluateQuizQuestion] = Field(..., description="평가 대상 퀴즈 문항 리스트")
 
 # --------------
 

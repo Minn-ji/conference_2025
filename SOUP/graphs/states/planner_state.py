@@ -8,14 +8,19 @@ class QuizItem(TypedDict):
     difficulty_level: Optional[str]
     is_correct: bool
     timeout: bool
-
+    # ----------
 
 # 최근 퀴즈 정보
 class RecentQuizInfo(TypedDict):
     quiz_id: str
     quizes: List[QuizItem]
     total_score: int
-
+    previous_quiz_score: Optional[int]        # 이전 퀴즈 점수
+    score_trend: Optional[str]                # "상승/하락/유지" 등
+    accuracy_by_unit: Optional[Dict[str, float]]      # 단원별 정답률
+    accuracy_by_topic: Optional[Dict[str, float]]     # 유형별 정답률
+    accuracy_by_difficulty: Optional[Dict[str, float]]# 난이도별 정답률
+    time_efficiency: Literal["상승","하락","유지"]  # 시간 효율 관련 문자열
 
 # Planner item (각 계획 항목)
 class PlannerItem(TypedDict):
