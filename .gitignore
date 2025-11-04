@@ -4,3 +4,5 @@
 *.pyc
 *.zip
 /test
+/SOUP/requirements.txt
+/SOUP/venv/
