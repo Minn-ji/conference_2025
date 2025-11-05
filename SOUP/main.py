@@ -13,6 +13,6 @@ app.include_router(api_router, prefix="/v1")
 
 @app.get("/")
 def read_root():
-    time.sleep(30)
+    # time.sleep(30)
     return {"comment": "Hello, It's SOUP API!", "status": "ok"}
 

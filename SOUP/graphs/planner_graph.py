@@ -79,7 +79,7 @@ def generate_planner_graph():
 
 example_state: PlannerState = {
     "grade": "1",
-    "available_time_min": 90.0/60.0,   # 시간(시간 단위). 없으면 None 가능
+    "available_time_min": 90,   # 시간(시간 단위). 없으면 None 가능
     "initial_level": "B",
     "recent_score": "중상",
     "recent_quiz_info": {
@@ -92,11 +92,11 @@ example_state: PlannerState = {
     },
     "recent_planner": {
         "meta": {"date": "2025-10-30", "day_of_week": "목", "planned_time_min": 90},
-        "content": [{"text": "소인수분해 복습", "time": 45}, {"text": "유형 문제풀이", "time": 45}],
+        "content": [{"text": "1. 소인수분해 - 소인수분해 : 복습", "time": 45}, {"text": "소인수 분해 - 소인수분해 : 유형 문제풀이", "time": 45}],
         "content_total_min": 90
     },
     # 분석/생성에 필요한 추가 입력
     "recent_grade": "B",
-    "current_unit": "자연수-(8) 최대공약수와 최소공배수",
+    "current_unit": "소인수분해 - 소인수분해",
     "related_units": ["자연수-(7) 소인수분해", "자연수-(9) 약수와 배수 응용"],
 }

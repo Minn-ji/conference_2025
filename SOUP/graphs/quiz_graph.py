@@ -10,5 +10,5 @@ def router(state: PlannerState) -> Dict:
 
 
 # --- Create Main Graph ---
-def eval_quiz_graph():
+def generate_quiz_graph():
     pass

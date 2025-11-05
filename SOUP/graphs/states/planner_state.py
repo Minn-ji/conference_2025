@@ -47,7 +47,7 @@ class RecentPlanner(TypedDict):
 class PlannerState(TypedDict):
     grade: Optional[int | str]   # 1,2,3 or "1","2","3"
     available_time_min: Optional[int]     # 하루 공부 가능 시간(분)
-    initial_level: Optional[Literal["A","B","C","D","E","F"]] # SOUP level
+    initial_level: Optional[Literal["A","B","C","D","E","F"]] # 문제집에 따른 level
     recent_quiz_info: Optional[RecentQuizInfo]
     recent_planner: Optional[RecentPlanner]
     recent_score: Optional[str]           # 최근 학기 성적(등급/점수 등 문자열)

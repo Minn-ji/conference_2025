@@ -8,6 +8,7 @@ __all__ = [
     "get_recent_planner",
     "safe",
     "ask_llm",
+    "ask_llm_for_quiz_selection",
     "ensure_json",
     "get_avg_quiz_score",
     "extract_accuracy_by_topic",
